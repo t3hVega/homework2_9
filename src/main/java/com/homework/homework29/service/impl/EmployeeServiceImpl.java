@@ -3,6 +3,7 @@ package com.homework.homework29.service.impl;
 import com.homework.homework29.exceptions.EmployeeAlreadyAddedException;
 import com.homework.homework29.exceptions.EmployeeNotFoundException;
 import com.homework.homework29.exceptions.EmployeeStorageIsFullException;
+import com.homework.homework29.exceptions.NameStartsWithLowerCase;
 import com.homework.homework29.model.Employee;
 import com.homework.homework29.service.EmployeeService;
 import com.homework.homework29.model.Employee;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -20,6 +22,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee addEmployee(String firstName, String lastName, Integer salary, Integer departmentId) {
         String employeeKey = getEmployeeKey(firstName, lastName);
+
+        if (isLetterCapital(firstName, lastName) == false) {
+            throw new NameStartsWithLowerCase("Имя сотрудника начинается на строчную букву");
+        }
 
         if (employees.containsKey(employeeKey)) {
             throw new EmployeeAlreadyAddedException("Сотрудник уже нанят");
@@ -66,5 +72,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
     private String getEmployeeKey(String firstName, String lastName) {
         return firstName + lastName;
+    }
+    private boolean isLetterCapital (String firstName, String lastName) {
+        return StringUtils.capitalize(firstName) == firstName && StringUtils.capitalize(lastName) == lastName;
     }
 }
