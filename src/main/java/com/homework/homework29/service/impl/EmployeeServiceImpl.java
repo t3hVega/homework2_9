@@ -74,6 +74,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         return firstName + lastName;
     }
     private boolean isLetterCapital (String firstName, String lastName) {
-        return StringUtils.capitalize(firstName) == firstName && StringUtils.capitalize(lastName) == lastName;
+        return StringUtils.capitalize(firstName).equals(firstName)  && StringUtils.capitalize(lastName).equals(lastName);
     }
 }
